@@ -1,23 +1,27 @@
 # Developer replays #
 #####################
-replay/*
-scores.db
+#replay/*
+#scores.db
 
 # Files generated while debugging #
 ###################################
 *.vgcore
+# *.vscode
 
 # Misc #
 ########
 *.swp
 tags
+obj-bak/*
+# audio/*
+# game.cfg
 
 # Output files #
 ################
 *.log
 *.com
 *.class
-*.dll
+# *.dll
 *.exe
 *.o
 *.so

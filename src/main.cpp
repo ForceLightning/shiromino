@@ -14,6 +14,8 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <string>
+#define SDL_MAIN_HANDLED
+
 // #include "tests.h"
 
 using namespace std;
