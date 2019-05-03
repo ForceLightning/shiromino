@@ -25,6 +25,14 @@ LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lsqlite3 -lm
 CFLAGS = $(COMPILER_FLAGS)
 ifeq ($(OS), Windows_NT)
 	CFLAGS += -lmingw32 -lSDL2main
+	ifdef MINGW
+		CFLAGS +=  -static-libgcc -static-libstdc++
+	endif
+else
+    UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Darwin)
+		CXX = g++-8
+	endif
 endif
 
 rwildcard = $(wildcard $1$2)$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
