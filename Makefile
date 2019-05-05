@@ -19,13 +19,19 @@ ifdef MINGW
 endif
 PKG_CONFIG ?= pkg-config
 
-COMPILER_FLAGS = -Wall -Wno-comment -g `${PKG_CONFIG} --cflags sdl2` -DSQLITE_OMIT_LOAD_EXTENSION
+COMPILER_FLAGS = -Wall -Wno-comment -ggdb `${PKG_CONFIG} --cflags sdl2` -DSQLITE_OMIT_LOAD_EXTENSION
 LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lsqlite3 -lm -lpthread
 
 CFLAGS = $(COMPILER_FLAGS)
 ifeq ($(OS), Windows_NT)
 	CFLAGS += -std=c++14 -lmingw32 -lSDL2main -static-libgcc -static-libstdc++
 	BIN_NAME = game.exe
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Darwin)
+		CXX = g++-8
+		# COMPILER_FLAGS += -std=c++11 -stdlib=libc++
+	endif
 endif
 
 rwildcard = $(wildcard $1$2)$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
