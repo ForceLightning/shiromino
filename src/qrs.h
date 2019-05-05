@@ -142,6 +142,7 @@
 
 #define TAP_ARS 0
 #define TI_ARS 1
+#define TI_SRS 2
 
 #define BRONZE 1
 #define SILVER 2

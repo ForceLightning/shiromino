@@ -119,7 +119,7 @@ static qrs_timings g1_master_curve[G1_MASTER_CURVE_MAX] =
 };
 
 static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
-{
+{   // LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
     {0, 4, 30, 14, 25, 25, 40},
     {30, 6, 30, 14, 25, 25, 40},
     {35, 8, 30, 14, 25, 25, 40},
@@ -157,6 +157,52 @@ static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
     {901, 5120, 17, 6, 12, 6, 6}
 };
 
+// TODO(G3 MASTER): SPEED CURVE
+static qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] = 
+{   // (SPEED) LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
+    {0, 1024, 30, 14, 25, 25, 40},
+    {30, 1536, 30, 14, 25, 25, 40},
+    {35, 2048, 30, 14, 25, 25, 40},
+    {40, 2560, 30, 14, 25, 25, 40},
+    {50, 3072, 30, 14, 25, 25, 40},
+    {60, 4096, 30, 14, 25, 25, 40},
+    {70, 8192, 30, 14, 25, 25, 40},
+    {80, 12288, 30, 14, 25, 25, 40},
+    {90, 16384, 30, 14, 25, 25, 40},
+    {100, 20480, 30, 14, 25, 25, 40},
+    {120, 24576, 30, 14, 25, 25, 40},
+    {140, 28672, 30, 14, 25, 25, 40},
+    {160, 32768, 30, 14, 25, 25, 40},
+    {170, 36864, 30, 14, 25, 25, 40},
+    {200, 1024, 30, 14, 25, 25, 40},
+    {220, 8192, 30, 14, 25, 25, 40},
+    {230, 16384, 30, 14, 25, 25, 40},
+    {233, 24576, 30, 14, 25, 25, 40},
+    {236, 32768, 30, 14, 25, 25, 40},
+    {239, 40960, 30, 14, 25, 25, 40},
+    {243, 49152, 30, 14, 25, 25, 40},
+    {247, 57344, 30, 14, 25, 25, 40},
+    // 251 - 500
+    {251, 65536, 30, 14, 25, 25, 40},
+    {300, 131072, 30, 14, 25, 25, 40},
+    {330, 196608, 30, 14, 25, 25, 40},
+    {360, 262144, 30, 14, 25, 25, 40},
+    {400, 327680, 30, 14, 25, 25, 40},
+    {420, 262144, 30, 14, 25, 25, 40},
+    {450, 196608, 30, 14, 25, 25, 40},
+    {500, 1310720, 30, 14, 25, 25, 40},
+    // 500 - 1799
+    {500, 1310720, 30, 8, 25, 25, 25},
+    {600, 1310720, 30, 8, 25, 16, 16},
+    {700, 1310720, 30, 8, 16, 12, 12},
+    {800, 1310720, 30, 8, 12, 6, 6},
+    {900, 1310720, 17, 6, 12, 6, 6},
+    {1000, 1310720, 17, 6, 6, 6, 6},
+    {1100, 1310720, 15, 6, 5, 5, 6},
+    {1200, 1310720, 15, 6, 4, 4, 6},
+};
+
+
 static qrs_timings g2_death_curve[G2_DEATH_CURVE_MAX] =
 {
     {0, 5120, 30, 10, 16, 12, 12},
@@ -182,6 +228,7 @@ static qrs_timings g3_terror_curve[G3_TERROR_CURVE_MAX] =
     {1200, 5120, 8, 4, 4, 3, 3},
     {1300, 5120, 15, 4, 4, 4, 6}
 };
+
 
 // TODO
 int g2_advance_garbage[12][24] =
@@ -283,6 +330,20 @@ float g2_grade_point_combo_table[10][4] =
     {1.5, 2.0, 2.5, 1.0},
     {1.5, 2.1, 2.6, 1.0},
     {2.0, 2.5, 3.0, 1.0}
+};
+
+float g3_grad_point_combo_table[10][4] =
+{
+    {1.0, 1.0, 1.0, 1.0},
+    {1.0, 1.2, 1.4, 1.5},
+    {1.0, 1.2, 1.5, 1.8},
+    {1.0, 1.4, 1.6, 2.0},
+    {1.0, 1.4, 1.7, 2.2},
+    {1.0, 1.4, 1.8, 2.3},
+    {1.0, 1.4, 1.9, 2.4},
+    {1.0, 1.5, 2.0, 2.5},
+    {1.0, 1.5, 2.1, 2.6},
+    {1.0, 2.0, 2.5, 3.0}
 };
 // clang-format on
 
@@ -430,6 +491,18 @@ static const struct levelmusic g3_terror_music[] = {
     { 9999, -1 }
 };
 
+static const struct levelmusic g3_master_music[] = {
+    { 0, 0 },
+    { 495, -1 },
+    { 500, 1 },
+    { 695, -1 },
+    { 700, 2 },
+    { 880, -1 },
+    { 900, 3 },
+    { QS_LEVEL_CREDITS, 4 },
+    { 9999, -1 }
+};
+
 static const struct levelmusic g1_music[] = {
     { 0, 0 },
     { 485, -1 },
@@ -477,6 +550,10 @@ static void update_music(qrsdata *q, coreState *cs)
             break;
 
         case MODE_G3_TERROR:
+            play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_terror_music));
+            break;
+        
+        case MODE_G3_MASTER:
             play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_terror_music));
             break;
 
@@ -664,6 +741,15 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         }
 
         q->credit_roll_counter = 54 * 60;
+    }
+    else if(flags & MODE_G3_MASTER)
+    {
+        q->mode_type = MODE_G3_MASTER;
+        q->grade = NO_GRADE;
+        q->lock_protect = 1;
+        flags |= SIMULATE_G3;
+        flags |= TETROMINO_ONLY;
+        flags &= ~(SIMULATE_G1 | SIMULATE_G2);
     }
     else if(flags & MODE_G1_MASTER)
     {
@@ -3220,7 +3306,7 @@ int qs_update_pracdata(coreState *cs)
         piece_seq[num - 1] = 1;
     }
 
-end_sequence_proc:
+    end_sequence_proc:
     for(i = 0; i < num; i++)
         d->usr_sequence[i] = piece_seq[i];
 
