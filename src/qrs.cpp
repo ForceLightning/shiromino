@@ -19,6 +19,7 @@
 #include "gfx_qs.h"    // very questionable dependency
 #include "gfx_structures.h"
 
+#include "zed_dbg.h"
 #include "rotation_tables.h"
 
 using namespace std;

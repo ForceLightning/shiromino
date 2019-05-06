@@ -760,6 +760,9 @@ int gfx_drawqrsfield(coreState *cs, grid_t *field, unsigned int mode, unsigned i
         case MODE_G3_TERROR:
             tetrion_qs = cs->assets->g3_tetrion_g3_terror.tex;
             break;
+        case MODE_G3_MASTER:
+            tetrion_qs = cs->assets->g3_tetrion_g3_master.tex;
+            break;
 
         default:
             break;

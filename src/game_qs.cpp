@@ -160,46 +160,46 @@ static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
 // TODO(G3 MASTER): SPEED CURVE
 static qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] = 
 {   // (SPEED) LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
-    {0, 1024, 30, 14, 25, 25, 40},
-    {30, 1536, 30, 14, 25, 25, 40},
-    {35, 2048, 30, 14, 25, 25, 40},
-    {40, 2560, 30, 14, 25, 25, 40},
-    {50, 3072, 30, 14, 25, 25, 40},
-    {60, 4096, 30, 14, 25, 25, 40},
-    {70, 8192, 30, 14, 25, 25, 40},
-    {80, 12288, 30, 14, 25, 25, 40},
-    {90, 16384, 30, 14, 25, 25, 40},
-    {100, 20480, 30, 14, 25, 25, 40},
-    {120, 24576, 30, 14, 25, 25, 40},
-    {140, 28672, 30, 14, 25, 25, 40},
-    {160, 32768, 30, 14, 25, 25, 40},
-    {170, 36864, 30, 14, 25, 25, 40},
-    {200, 1024, 30, 14, 25, 25, 40},
-    {220, 8192, 30, 14, 25, 25, 40},
-    {230, 16384, 30, 14, 25, 25, 40},
-    {233, 24576, 30, 14, 25, 25, 40},
-    {236, 32768, 30, 14, 25, 25, 40},
-    {239, 40960, 30, 14, 25, 25, 40},
-    {243, 49152, 30, 14, 25, 25, 40},
-    {247, 57344, 30, 14, 25, 25, 40},
+    {0, 4, 30, 14, 25, 25, 40},
+    {30, 6, 30, 14, 25, 25, 40},
+    {35, 8, 30, 14, 25, 25, 40},
+    {40, 10, 30, 14, 25, 25, 40},
+    {50, 12, 30, 14, 25, 25, 40},
+    {60, 16, 30, 14, 25, 25, 40},
+    {70, 32, 30, 14, 25, 25, 40},
+    {80, 48, 30, 14, 25, 25, 40},
+    {90, 64, 30, 14, 25, 25, 40},
+    {100, 80, 30, 14, 25, 25, 40},
+    {120, 96, 30, 14, 25, 25, 40},
+    {140, 112, 30, 14, 25, 25, 40},
+    {160, 128, 30, 14, 25, 25, 40},
+    {170, 144, 30, 14, 25, 25, 40},
+    {200, 4, 30, 14, 25, 25, 40},
+    {220, 32, 30, 14, 25, 25, 40},
+    {230, 64, 30, 14, 25, 25, 40},
+    {233, 96, 30, 14, 25, 25, 40},
+    {236, 128, 30, 14, 25, 25, 40},
+    {239, 160, 30, 14, 25, 25, 40},
+    {243, 192, 30, 14, 25, 25, 40},
+    {247, 224, 30, 14, 25, 25, 40},
     // 251 - 500
-    {251, 65536, 30, 14, 25, 25, 40},
-    {300, 131072, 30, 14, 25, 25, 40},
-    {330, 196608, 30, 14, 25, 25, 40},
-    {360, 262144, 30, 14, 25, 25, 40},
-    {400, 327680, 30, 14, 25, 25, 40},
-    {420, 262144, 30, 14, 25, 25, 40},
-    {450, 196608, 30, 14, 25, 25, 40},
-    {500, 1310720, 30, 14, 25, 25, 40},
+    {251, 256, 30, 14, 25, 25, 40},
+    {300, 512, 30, 14, 25, 25, 40},
+    {330, 768, 30, 14, 25, 25, 40},
+    {360, 1024, 30, 14, 25, 25, 40},
+    {400, 1280, 30, 14, 25, 25, 40},
+    {420, 1024, 30, 14, 25, 25, 40},
+    {450, 768, 30, 14, 25, 25, 40},
+    {500, 5120, 30, 14, 25, 25, 40},
     // 500 - 1799
-    {500, 1310720, 30, 8, 25, 25, 25},
-    {600, 1310720, 30, 8, 25, 16, 16},
-    {700, 1310720, 30, 8, 16, 12, 12},
-    {800, 1310720, 30, 8, 12, 6, 6},
-    {900, 1310720, 17, 6, 12, 6, 6},
-    {1000, 1310720, 17, 6, 6, 6, 6},
-    {1100, 1310720, 15, 6, 5, 5, 6},
-    {1200, 1310720, 15, 6, 4, 4, 6},
+    {500, 5120, 30, 8, 25, 25, 25},
+    {600, 5120, 30, 8, 25, 16, 16},
+    {700, 5120, 30, 8, 16, 12, 12},
+    {800, 5120, 30, 8, 12, 6, 6},
+    {900, 5120, 17, 6, 12, 6, 6},
+    {1000, 5120, 17, 6, 6, 6, 6},
+    {1100, 5120, 15, 6, 5, 5, 6},
+    {1200, 5120, 15, 6, 4, 4, 6},
 };
 
 
@@ -332,7 +332,7 @@ float g2_grade_point_combo_table[10][4] =
     {2.0, 2.5, 3.0, 1.0}
 };
 
-float g3_grad_point_combo_table[10][4] =
+float g3_grade_point_combo_table[10][4] =
 {
     {1.0, 1.0, 1.0, 1.0},
     {1.0, 1.2, 1.4, 1.5},
@@ -749,7 +749,9 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         q->lock_protect = 1;
         flags |= SIMULATE_G3;
         flags |= TETROMINO_ONLY;
-        flags &= ~(SIMULATE_G1 | SIMULATE_G2);
+        flags &= ~SIMULATE_G1;
+        flags &= ~SIMULATE_G2;
+        flags &= ~PENTOMINO_ONLY;
     }
     else if(flags & MODE_G1_MASTER)
     {
@@ -830,6 +832,7 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         q->special_irs = 0;
         q->lock_protect = 1;
         q->hold_enabled = 1;
+        log_info("W, X, Y: %d, %d, %d", q->field_w, q->field_x, q->field_y);
     }
 
     if(q->game_type == 0)
@@ -1468,6 +1471,15 @@ int qs_game_frame(game_t *g)
                 }
                 break;
 
+            // TODO(G3): INTERNAL SPEED LEVEL
+            case MODE_G3_MASTER:
+                while(q->speed_curve_index < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level <= q->level)
+                {
+                    q->p1->speeds = &g3_master_curve[q->speed_curve_index];
+                    q->speed_curve_index++;
+                }
+                break;
+
             case MODE_G1_MASTER:
                 while(q->speed_curve_index < G1_MASTER_CURVE_MAX && g1_master_curve[q->speed_curve_index].level <= q->level)
                 {
@@ -1643,6 +1655,29 @@ int qs_game_frame(game_t *g)
 
                     (*s) = PSINACTIVE;
                     break;
+                // TODO(G3): CREDIT ROLL
+                case MODE_G3_MASTER:
+                    q->state_flags &= ~(GAMESTATE_CREDITS | GAMESTATE_FADING | GAMESTATE_INVISIBLE);
+                    if(q->p1->state != PSINACTIVE)
+                    {
+                        if(q->mroll_unlocked)
+                        {
+                            q->state_flags |= GAMESTATE_FIREWORKS_GM;
+
+                            if(q->credit_roll_lineclears >= 32)
+                                q->grade = GRADE_GM | ORANGE_LINE;
+                            else
+                                q->grade = GRADE_GM | GREEN_LINE;
+                        }
+                        else
+                        {
+                            q->state_flags |= GAMESTATE_FIREWORKS;
+                            q->grade |= ORANGE_LINE;
+                        }
+                    }
+
+                    (*s) = PSINACTIVE;
+                    break;
             }
 
             if(q->playback)
@@ -1735,6 +1770,19 @@ int qs_game_frame(game_t *g)
         return 0;
 
     if(q->mode_type == MODE_G2_MASTER)
+    {
+        int decay_rate = grade_point_decays[q->internal_grade];
+        if(((*s) & PSFALL || (*s) & PSLOCK) && q->combo_simple == 0)
+            q->grade_decay_counter++;
+
+        if(q->grade_decay_counter >= decay_rate && q->grade_points > 0)
+        {
+            q->grade_points--;
+            q->grade_decay_counter = 0;
+        }
+    }
+
+    if(q->mode_type == MODE_G3_MASTER)
     {
         int decay_rate = grade_point_decays[q->internal_grade];
         if(((*s) & PSFALL || (*s) & PSLOCK) && q->combo_simple == 0)
@@ -1862,7 +1910,18 @@ static int qs_are_expired(game_t *g)
                 }
 
                 break;
-
+            // TODO(G3): LEVEL STOP
+            case MODE_G3_MASTER:
+                if(q->level != 998)
+                {
+                    q->level++;
+                    q->lvlinc = 1;
+                }
+                else
+                {
+                    q->lvlinc = 0;
+                    q->levelstop_time++;
+                }
             default:
                 q->level++;
                 q->lvlinc = 1;
@@ -1907,6 +1966,13 @@ static int qs_are_expired(game_t *g)
             q->state_flags |= GAMESTATE_CREDITS_TOPOUT;
 
             if(q->mode_type == MODE_G2_MASTER)
+            {
+                if(q->mroll_unlocked)
+                    q->grade = GRADE_M | GREEN_LINE;
+                else
+                    q->grade |= GREEN_LINE;
+            }
+            if(q->mode_type == MODE_G3_MASTER)
             {
                 if(q->mroll_unlocked)
                     q->grade = GRADE_M | GREEN_LINE;
@@ -2031,6 +2097,15 @@ int qs_process_lineclear(game_t *g)
 
                 case MODE_G3_TERROR:
                     if(q->level == 1300 && !(q->state_flags & GAMESTATE_CREDITS))
+                    {
+                        q->state_flags |= GAMESTATE_FADE_TO_CREDITS;
+                        (*s) = PSINACTIVE;
+                    }
+
+                    break;
+                // TODO(G3): LEVEL STOP???
+                case MODE_G3_MASTER:
+                    if(q->level == 999 && !(q->state_flags & GAMESTATE_CREDITS))
                     {
                         q->state_flags |= GAMESTATE_FADE_TO_CREDITS;
                         (*s) = PSINACTIVE;
@@ -2351,6 +2426,33 @@ int qs_process_lockflash(game_t *g)
                                     7 * q->placement_speed;
 
                         break;
+                    // TODO(G3): INTERNAL GRADING + SPEED
+                    case MODE_G3_MASTER:
+                        pts = grade_points_table[q->internal_grade][n - 1];
+                        combo_mult = g3_grade_point_combo_table[q->combo_simple - 1][n - 1];
+
+                        q->grade_points += (int)ceil(pts * combo_mult) * (1 + q->level / 250);
+
+                        if(q->grade_points >= 100)
+                        {
+                            int old_grade = q->grade;
+                            q->grade_points = 0;
+                            q->internal_grade++;
+                            if(q->internal_grade > 31)
+                                q->internal_grade = 31;
+                            q->grade = internal_to_displayed_grade(q->internal_grade);
+                            if(old_grade != q->grade)
+                            {
+                                q->last_gradeup_timestamp = g->frame_counter;
+                                sfx_play(&cs->assets->gradeup);
+                            }
+                        }
+
+                        // Score = ((Level + Lines)/4 + Soft + (2 x Sonic)) x Lines x Combo x Bravo + (Level_After_Clear)/2 + (Speed x 7)
+                        q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
+                                    7 * q->placement_speed;
+
+                        break;
                 }
             }
             else
@@ -2487,6 +2589,7 @@ int qs_process_lockflash(game_t *g)
 
                                 histrand_set_difficulty(q->randomizer, 10.0);
                             }
+                            // TODO(G3): MROLL CONDITIONS
                             else if(q->section == 10)
                             {
                                 if(q->timer->time > 11 * 60 * 60)
@@ -2667,6 +2770,58 @@ int qs_process_lockflash(game_t *g)
                             }
 
                             break;
+                        case MODE_G3_MASTER:
+                            if(q->level >= 999)
+                            {
+                                q->level = 999;
+                                if(q->timer->time > 525 * 60 || q->grade < GRADE_S9)
+                                    q->mroll_unlocked = false;
+                            }
+
+                            switch(q->section - 1)
+                            {
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                    if(q->section_tetrises[q->section - 1] < 2 || q->section_times[q->section - 1] > (65 * 60))
+                                    {
+                                        q->mroll_unlocked = false;
+                                    }
+
+                                    break;
+
+                                case 5:
+                                    if(q->section_tetrises[q->section - 1] < 1 ||
+                                       q->section_times[q->section - 1] > (AVG_FIRST_FIVE(q->section_times)) + 2 * 60)
+                                    {
+                                        q->mroll_unlocked = false;
+                                    }
+
+                                    break;
+
+                                case 6:
+                                case 7:
+                                case 8:
+                                    if(q->section_tetrises[q->section - 1] < 1 ||
+                                       q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
+                                    {
+                                        q->mroll_unlocked = false;
+                                    }
+
+                                    break;
+
+                                case 9:
+                                    if(q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
+                                        q->mroll_unlocked = false;
+
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            break;
 
                         case MODE_G1_20G:
                         case MODE_G1_MASTER:
@@ -2738,6 +2893,14 @@ int qs_process_lockflash(game_t *g)
                     case MODE_G3_TERROR:
                         break;
 
+                    // TODO(G3): MROLL CONDITIONS
+                    case MODE_G3_MASTER:
+                        if(q->timer->time > 525 * 60 || q->grade < GRADE_S9)
+                            q->mroll_unlocked = false;
+
+                        if(q->section_times[9] > (q->section_times[8]) + 2 * 60)
+                            q->mroll_unlocked = false;
+                        break;
                     case MODE_G1_20G:
                     case MODE_G1_MASTER:
                         if(q->timer->time >= (13 * 60 * 60 + 30 * 60) || q->score < 126000)
