@@ -2,16 +2,18 @@
 #####################
 #replay/*
 #scores.db
+*.db
 
 # Files generated while debugging #
 ###################################
 *.vgcore
-# *.vscode
+*.vscode/*
 
 # Misc #
 ########
 *.swp
 tags
+obj/*
 obj-bak/*
 # audio/*
 # game.cfg

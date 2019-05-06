@@ -24,7 +24,8 @@ LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lsqlite3 -lm
 
 CFLAGS = $(COMPILER_FLAGS)
 ifeq ($(OS), Windows_NT)
-	CFLAGS += -lmingw32 -lSDL2main -static-libgcc -static-libstdc++
+	CFLAGS += -std=c++14 -lmingw32 -lSDL2main -static-libgcc -static-libstdc++
+	BIN_NAME = game.exe
 else
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S), Darwin)
@@ -49,8 +50,8 @@ all: dirs game
 
 game : $(OBJ)
 	$(CXX) $(OBJ) $(CFLAGS) $(LINK_FLAGS) -o $(BIN_PATH)/$(BIN_NAME)
-ifdef MINGW
-	cp /usr/i686-w64-mingw32/bin/*.dll .
+ifdef MSYS_M64
+	cp /mingw32/bin/SDL2*.dll .
 endif
 
 -include $(DEPS)

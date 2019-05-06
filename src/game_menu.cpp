@@ -1213,29 +1213,43 @@ int mload_main(game_t *g, int val)
     m->label_text_rgba = 0x40FF40FF;
     m->value_text_rgba = 0xA0A0FFFF;
 
-    d->menu[7] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("MULTI-EDITOR"));
+    d->menu[7] = std_game_multiopt_create(g->origin, MODE_G3_MASTER, 10, bfromcstr("G3 MASTER"));
     m = d->menu[7];
+    d6 = (struct game_multiopt_data *)m->data;
+    if(d->main_menu_data.selection == 7)
+        d6->selection = d->main_menu_data.opt_selection;
+    else
+        d6->selection = 0;
+    m->x = 4 * 16;
+    m->y = 14 * 16;
+    m->value_x = m->x + 11 * 16;
+    m->value_y = m->y;
+    m->label_text_rgba = 0xFF4040FF;
+    m->value_text_rgba = 0xA0A0FFFF;
+
+    d->menu[8] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("MULTI-EDITOR"));
+    m = d->menu[8];
     d1 = (struct action_opt_data *)m->data;
     d1->action = mload_practice;
     d1->val = 0;
     m->x = 4 * 16;
     m->y = 16 * 16;
 
-    d->menu[8] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("REPLAY"));
-    m = d->menu[8];
+    d->menu[9] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("REPLAY"));
+    m = d->menu[9];
     d1 = (struct action_opt_data *)m->data;
     d1->action = mload_replay;
     d1->val = 0;
     m->x = 4 * 16;
     m->y = 17 * 16;
 
-    d->menu[9] = menu_opt_create(MENU_LABEL, NULL, bfromcstr("SETTINGS"));
-    m = d->menu[9];
+    d->menu[10] = menu_opt_create(MENU_LABEL, NULL, bfromcstr("SETTINGS"));
+    m = d->menu[10];
     m->x = 4 * 16;
     m->y = 20 * 16;
 
-    d->menu[10] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("MASTER VOLUME"));
-    m = d->menu[10];
+    d->menu[11] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("MASTER VOLUME"));
+    m = d->menu[11];
     d2 = (struct multi_opt_data *)m->data;
     d2->num = 101;
     d2->param = &g->origin->settings->master_volume;
@@ -1253,8 +1267,8 @@ int mload_main(game_t *g, int val)
     m->value_y = m->y;
     m->value_text_flags = DRAWTEXT_ALIGN_RIGHT | DRAWTEXT_VALUE_BAR;
 
-    d->menu[11] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("SFX VOLUME"));
-    m = d->menu[11];
+    d->menu[12] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("SFX VOLUME"));
+    m = d->menu[12];
     d2 = (struct multi_opt_data *)m->data;
     d2->num = 101;
     d2->param = &g->origin->settings->sfx_volume;
@@ -1272,8 +1286,8 @@ int mload_main(game_t *g, int val)
     m->value_y = m->y;
     m->value_text_flags = DRAWTEXT_ALIGN_RIGHT | DRAWTEXT_VALUE_BAR;
 
-    d->menu[12] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("MUSIC VOLUME"));
-    m = d->menu[12];
+    d->menu[13] = menu_opt_create(MENU_MULTIOPT, NULL, bfromcstr("MUSIC VOLUME"));
+    m = d->menu[13];
     d2 = (struct multi_opt_data *)m->data;
     d2->num = 101;
     d2->param = &g->origin->settings->mus_volume;
@@ -1291,16 +1305,16 @@ int mload_main(game_t *g, int val)
     m->value_y = m->y;
     m->value_text_flags = DRAWTEXT_ALIGN_RIGHT | DRAWTEXT_VALUE_BAR;
 
-    d->menu[13] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("QUIT"));
-    m = d->menu[13];
+    d->menu[14] = menu_opt_create(MENU_ACTION, NULL, bfromcstr("QUIT"));
+    m = d->menu[14];
     d1 = (struct action_opt_data *)m->data;
     d1->action = menu_action_quit;
     d1->val = 0;
     m->x = 4 * 16;
     m->y = 27 * 16;
 
-    d->menu[14] = menu_opt_create(MENU_LABEL, NULL, bfromcstr("Pentomino C rev 1.2"));
-    m = d->menu[14];
+    d->menu[15] = menu_opt_create(MENU_LABEL, NULL, bfromcstr("Pentomino C rev 1.2"));
+    m = d->menu[15];
     m->x = 638 - (19 * 15);
     m->y = 2;
     m->label_text_rgba = 0x808080A0;
