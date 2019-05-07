@@ -157,6 +157,9 @@
 #define GET_PIECE_FADE_COUNTER(n) ((n >> 8) & 0xffff)
 #define SET_PIECE_FADE_COUNTER(n, f) n = ((n & 0xff0000ff) | ((f & 0xffff) << 8))
 
+#define ROTATION_ARS 1
+#define ROTATION_SRS 2
+
 extern const char *qrs_piece_names[25];
 
 typedef uint8_t piece_id;
@@ -290,6 +293,7 @@ typedef struct
     bool using_gems;
 
     unsigned int piece_fade_rate;
+    int rot_mode;
 
 // fields which are assumed to be mutated during normal gameplay
 
@@ -365,6 +369,8 @@ typedef struct
 
     int speed_curve_index;
     int music;
+    int cools;
+    int regrets;
     //int history[10];    // 0, 1, 2, 3, 4, 5 are in the past; 6 is the current piece; 7, 8, 9 are previews
 } qrsdata;
 
