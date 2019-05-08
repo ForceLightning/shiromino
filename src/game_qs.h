@@ -132,6 +132,7 @@
 const char *get_grade_name(int grade);
 const char *get_internal_grade_name(int index);
 int internal_to_displayed_grade(int internal_grade);
+extern qrs_tgm3 g3_section_reqs[10];
 
 game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_id);
 int qs_game_init(game_t *g);

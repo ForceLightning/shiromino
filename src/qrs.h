@@ -202,6 +202,13 @@ typedef struct
     int orient;
 } qrs_player;
 
+typedef struct
+{
+    int level;
+    unsigned int cool_time;
+    int regret_time;
+} qrs_tgm3;
+
 struct pracdata
 {
     int game_type;    // mirrors of values in qrsdata; these are just here so that..
@@ -338,6 +345,10 @@ typedef struct
     long cur_section_timestamp;
     int section_times[MAX_SECTIONS];
     int section_tetrises[MAX_SECTIONS];
+    unsigned long section_cool_times[MAX_SECTIONS];
+    bool section_cools[MAX_SECTIONS];
+    bool section_cool_check;
+    bool section_cool_display;
 
     // values: 1 = set to 2 next time a rotate happens.
     //           2 = lock during THIS frame ( handled by qs_process_lock() )
@@ -425,5 +436,9 @@ int qrs_dropfield(game_t *g);
 int qrs_spawn_garbage(game_t *g, unsigned int flags);
 
 void qrs_embiggen(piecedef *p);
+
+bool qrs_coolcheck(qrsdata *q);
+bool qrs_regretcheck(qrsdata *q);
+
 
 #endif

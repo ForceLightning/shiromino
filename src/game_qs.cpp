@@ -202,6 +202,20 @@ static qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] =
     {1200, 5120, 15, 6, 4, 4, 6},
 };
 
+static qrs_tgm3 g3_section_reqs[10] = 
+{
+    {1, 52, 90},
+    {101, 52, 85},
+    {201, 49, 85},
+    {301, 45, 68},
+    {401, 45, 60},
+    {501, 42, 60},
+    {601, 42, 50},
+    {701, 38, 50},
+    {801, 38, 50},
+    {901, -1, 50}
+};
+
 
 static qrs_timings g2_death_curve[G2_DEATH_CURVE_MAX] =
 {
@@ -703,6 +717,9 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
 
     q->mroll_unlocked = true;
     q->cur_section_timestamp = 0;
+    q->section_cool_check = false;
+    q->cools = 0;
+    q->regrets = 0;
 
     for(int i = 0; i < MAX_SECTIONS; i++)
     {
@@ -1473,9 +1490,9 @@ int qs_game_frame(game_t *g)
 
             // TODO(G3): INTERNAL SPEED LEVEL
             case MODE_G3_MASTER:
-                while(q->speed_curve_index < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level <= q->level)
+                while(q->speed_curve_index < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level + q->cools <= q->level)
                 {
-                    q->p1->speeds = &g3_master_curve[q->speed_curve_index];
+                    q->p1->speeds = &g3_master_curve[q->speed_curve_index + q->cools];
                     q->speed_curve_index++;
                 }
                 break;
@@ -1781,7 +1798,7 @@ int qs_game_frame(game_t *g)
             q->grade_decay_counter = 0;
         }
     }
-
+    // TODO(G3): INTERNAL GRADE DECAY LOGIC
     if(q->mode_type == MODE_G3_MASTER)
     {
         int decay_rate = grade_point_decays[q->internal_grade];
@@ -2309,7 +2326,7 @@ int qs_process_lockflash(game_t *g)
             if(!(q->state_flags & GAMESTATE_CREDITS) && !q->pracdata)
             {
                 if(q->game_type == SIMULATE_G3 && n > 2)
-                    q->lvlinc = 2 * n - 2;
+                    q->lvlinc = 2 * n - 2;  // TODO(G3): CHECK LOGIC (n = line clear per frame)
                 else
                     q->lvlinc = n;
 
@@ -2567,11 +2584,37 @@ int qs_process_lockflash(game_t *g)
 
             sfx_play(&cs->assets->lineclear);
 
+            // TODO(G3): SECTION COOL LOGIC
+            if(q->mode_type == MODE_G3_MASTER)
+            {
+                if(((q->level - q->lvlinc) % 100) > 70 && !q->section_cool_check)
+                {
+                    q->section_cool_times[q->section] = q->timer->time - q->cur_section_timestamp;
+                    if(qrs_coolcheck(q))
+                    {
+                        q->section_cool_check = true;
+                        q->cools++;
+                        q->section_cools[q->section] = true;
+                    }
+                }
+                if(82 <= (q->level % 100) <= 99 && !q->section_cool_display)
+                {
+                    // Disaply section cool
+                    q->section_cool_display = true;
+                }
+            }
+            
+
             if(((q->level - q->lvlinc) % 100) > 90 && (q->level % 100) < 10)
             {
                 q->section_times[q->section] = q->timer->time - q->cur_section_timestamp;
                 q->cur_section_timestamp = q->timer->time;
                 q->section++;
+                if(q->mode_type == MODE_G3_MASTER)
+                {
+                    q->section_cool_check = false;
+                    q->section_cool_display = false;
+                }
 
                 q->levelstop_time = 0;
 
@@ -2771,56 +2814,63 @@ int qs_process_lockflash(game_t *g)
 
                             break;
                         case MODE_G3_MASTER:
+                            // TODO(G3): SECTION REGRET LOGIC
                             if(q->level >= 999)
                             {
                                 q->level = 999;
                                 if(q->timer->time > 525 * 60 || q->grade < GRADE_S9)
                                     q->mroll_unlocked = false;
                             }
-
-                            switch(q->section - 1)
+                            if(qrs_regretcheck(q))
                             {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 3:
-                                case 4:
-                                    if(q->section_tetrises[q->section - 1] < 2 || q->section_times[q->section - 1] > (65 * 60))
-                                    {
-                                        q->mroll_unlocked = false;
-                                    }
-
-                                    break;
-
-                                case 5:
-                                    if(q->section_tetrises[q->section - 1] < 1 ||
-                                       q->section_times[q->section - 1] > (AVG_FIRST_FIVE(q->section_times)) + 2 * 60)
-                                    {
-                                        q->mroll_unlocked = false;
-                                    }
-
-                                    break;
-
-                                case 6:
-                                case 7:
-                                case 8:
-                                    if(q->section_tetrises[q->section - 1] < 1 ||
-                                       q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
-                                    {
-                                        q->mroll_unlocked = false;
-                                    }
-
-                                    break;
-
-                                case 9:
-                                    if(q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
-                                        q->mroll_unlocked = false;
-
-                                    break;
-
-                                default:
-                                    break;
+                                q->regrets++;
+                                q->section_cools[q->section-1] = false;
+                                q->mroll_unlocked = false;
+                                // TODO(G3): DISPLAY REGRET
                             }
+                            // switch(q->section - 1)
+                            // {
+                            //     case 0:
+                            //     case 1:
+                            //     case 2:
+                            //     case 3:
+                            //     case 4:
+                            //         if(q->section_tetrises[q->section - 1] < 2 || q->section_times[q->section - 1] > (65 * 60))
+                            //         {
+                            //             q->mroll_unlocked = false;
+                            //         }
+
+                            //         break;
+
+                            //     case 5:
+                            //         if(q->section_tetrises[q->section - 1] < 1 ||
+                            //            q->section_times[q->section - 1] > (AVG_FIRST_FIVE(q->section_times)) + 2 * 60)
+                            //         {
+                            //             q->mroll_unlocked = false;
+                            //         }
+
+                            //         break;
+
+                            //     case 6:
+                            //     case 7:
+                            //     case 8:
+                            //         if(q->section_tetrises[q->section - 1] < 1 ||
+                            //            q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
+                            //         {
+                            //             q->mroll_unlocked = false;
+                            //         }
+
+                            //         break;
+
+                            //     case 9:
+                            //         if(q->section_times[q->section - 1] > (q->section_times[q->section - 2]) + 2 * 60)
+                            //             q->mroll_unlocked = false;
+
+                            //         break;
+
+                            //     default:
+                            //         break;
+                            // }
                             break;
 
                         case MODE_G1_20G:
