@@ -8,13 +8,16 @@
 ###################################
 *.vgcore
 *.vscode/*
+*.vs/*
 
 # Misc #
 ########
 *.swp
 tags
-obj/*
-obj-bak/*
+obj/
+obj-bak/
+.profile
+game.bak
 # audio/*
 # game.cfg
 
@@ -27,6 +30,7 @@ obj-bak/*
 *.exe
 *.o
 *.so
+*.d
 game
 obj/
 bin/

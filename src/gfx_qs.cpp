@@ -405,6 +405,17 @@ int gfx_drawqs(game_t *g)
                     textX -= 7*16 + 8;
                     secTimeStr = strtools::format("%d", sec+1);
                     secTimeFmt.rgba = 0x8080B0FF;
+                    if(q->mode_type == MODE_G3_MASTER)
+                    {
+                        switch(q->section_cools[sec])
+                        {
+                            case true:
+                                secTimeFmt.rgba = 0xB08080FF;
+                                break;
+                            case false:
+                                secTimeFmt.rgba = 0x8080B0FF;
+                        }
+                    }
                     gfx_drawtext(cs, secTimeStr, textX, secY, monofont_fixedsys, &secTimeFmt);
                 }
 

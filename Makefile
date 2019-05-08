@@ -24,7 +24,7 @@ LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lsqlite3 -lm
 
 CFLAGS = $(COMPILER_FLAGS)
 ifeq ($(OS), Windows_NT)
-	CFLAGS += -std=c++14 -lmingw32 -lSDL2main -static-libgcc -static-libstdc++
+	CFLAGS += -lmingw32 -lSDL2main -static-libgcc -static-libstdc++ -Wno-narrowing
 	BIN_NAME = game.exe
 else
 	UNAME_S := $(shell uname -s)

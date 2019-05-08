@@ -158,7 +158,7 @@ static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
 };
 
 // TODO(G3 MASTER): SPEED CURVE
-static qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] = 
+qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] = 
 {   // (SPEED) LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
     {0, 4, 30, 14, 25, 25, 40},
     {30, 6, 30, 14, 25, 25, 40},
@@ -202,7 +202,7 @@ static qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] =
     {1200, 5120, 15, 6, 4, 4, 6},
 };
 
-static qrs_tgm3 g3_section_reqs[10] = 
+qrs_tgm3 g3_section_reqs[10] = 
 {
     {1, 52, 90},
     {101, 52, 85},
@@ -718,6 +718,7 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
     q->mroll_unlocked = true;
     q->cur_section_timestamp = 0;
     q->section_cool_check = false;
+    q->section_cool_display = false;
     q->cools = 0;
     q->regrets = 0;
 
@@ -725,6 +726,8 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
     {
         q->section_times[i] = -1;
         q->section_tetrises[i] = 0;
+        q->section_cool_times[i] = -1;
+        q->section_cools[i] = false;
     }
 
     if(flags & MODE_G2_DEATH)
@@ -1457,6 +1460,37 @@ int qs_game_frame(game_t *g)
         }
     }
 
+    struct text_formatting *fmt = text_fmt_create(DRAWTEXT_CENTERED, RGBA_DEFAULT, RGBA_OUTLINE_DEFAULT);
+    fmt->size_multiplier = 2.0;
+    fmt->outlined = false;
+    if(q->pracdata)
+        fmt->outlined = true;
+
+    fmt->outline_rgba = 0x00000080;
+    // TODO(G3): SECTION COOL LOGIC
+    if(q->mode_type & MODE_G3_MASTER)
+    {
+        if(((q->level - q->lvlinc) % 100) >= 70 && !q->section_cool_check)
+        {
+            q->section_cool_times[q->section] = q->timer->time - q->cur_section_timestamp;
+            if(qrs_coolcheck(q))
+            {
+                q->section_cools[q->section] = true;
+            }
+            q->section_cool_check = true;
+        }
+        if(82 <= (q->level % 100) && (q->level % 100) <= 100 && !q->section_cool_display)
+        {
+            // Display section cool
+            if(q->section_cools[q->section])
+            {
+                fmt->rgba = 0x00FF00FF;
+                gfx_pushmessage(cs, "COOL!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+            }
+            q->section_cool_display = true;
+        }
+    }
+
     if(!q->pracdata && !(q->state_flags & GAMESTATE_FADE_TO_CREDITS))
     {
         // handle speed curve and music updates (this runs every frame)
@@ -1915,19 +1949,6 @@ static int qs_are_expired(game_t *g)
             case MODE_G1_20G:
             case MODE_G1_MASTER:
             case MODE_G2_MASTER:
-                if(q->level != 998)
-                {
-                    q->level++;
-                    q->lvlinc = 1;
-                }
-                else
-                {
-                    q->lvlinc = 0;
-                    q->levelstop_time++;
-                }
-
-                break;
-            // TODO(G3): LEVEL STOP
             case MODE_G3_MASTER:
                 if(q->level != 998)
                 {
@@ -1939,6 +1960,7 @@ static int qs_are_expired(game_t *g)
                     q->lvlinc = 0;
                     q->levelstop_time++;
                 }
+                break;
             default:
                 q->level++;
                 q->lvlinc = 1;
@@ -2325,7 +2347,7 @@ int qs_process_lockflash(game_t *g)
 
             if(!(q->state_flags & GAMESTATE_CREDITS) && !q->pracdata)
             {
-                if(q->game_type == SIMULATE_G3 && n > 2)
+                if(q->game_type == SIMULATE_G3 && n > 2 && q->mode_type == MODE_G3_TERROR)
                     q->lvlinc = 2 * n - 2;  // TODO(G3): CHECK LOGIC (n = line clear per frame)
                 else
                     q->lvlinc = n;
@@ -2583,35 +2605,22 @@ int qs_process_lockflash(game_t *g)
             }
 
             sfx_play(&cs->assets->lineclear);
-
-            // TODO(G3): SECTION COOL LOGIC
-            if(q->mode_type == MODE_G3_MASTER)
-            {
-                if(((q->level - q->lvlinc) % 100) > 70 && !q->section_cool_check)
-                {
-                    q->section_cool_times[q->section] = q->timer->time - q->cur_section_timestamp;
-                    if(qrs_coolcheck(q))
-                    {
-                        q->section_cool_check = true;
-                        q->cools++;
-                        q->section_cools[q->section] = true;
-                    }
-                }
-                if(82 <= (q->level % 100) <= 99 && !q->section_cool_display)
-                {
-                    // Disaply section cool
-                    q->section_cool_display = true;
-                }
-            }
-            
+            struct text_formatting *fmt = text_fmt_create(DRAWTEXT_CENTERED, RGBA_DEFAULT, RGBA_OUTLINE_DEFAULT);
+            fmt->size_multiplier = 2.0;
+            fmt->outlined = false;
+            if(q->pracdata)
+                fmt->outlined = true;
 
             if(((q->level - q->lvlinc) % 100) > 90 && (q->level % 100) < 10)
             {
                 q->section_times[q->section] = q->timer->time - q->cur_section_timestamp;
                 q->cur_section_timestamp = q->timer->time;
                 q->section++;
-                if(q->mode_type == MODE_G3_MASTER)
+                gfx_pushmessage(cs, "Level Up!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                // log_info("Section: %d", q->section);
+                if(q->mode_type & MODE_G3_MASTER)
                 {
+                    log_info("Level: %d, Section: %d: Cools: %d", q->level, q->section, q->cools);
                     q->section_cool_check = false;
                     q->section_cool_display = false;
                 }
@@ -2827,6 +2836,12 @@ int qs_process_lockflash(game_t *g)
                                 q->section_cools[q->section-1] = false;
                                 q->mroll_unlocked = false;
                                 // TODO(G3): DISPLAY REGRET
+                                fmt->rgba = 0xFF0000FF;
+                                gfx_pushmessage(cs, "REGRET!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                            }
+                            else if(q->section_cools[q->section-1])
+                            {
+                                q->cools++;
                             }
                             // switch(q->section - 1)
                             // {

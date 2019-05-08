@@ -18,6 +18,9 @@
 #include <vector>
 #include <string>
 
+#include <chrono>
+#include <thread>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "SGUIL/SGUIL.hpp"
@@ -31,7 +34,7 @@
 #define PENTOMINO_C_REVISION_STRING "rev 1.2"
 
 using namespace std;
-
+// using namespace std::chrono_literals;
 BindableVariables bindables;
 
 #if(defined(_WIN64) || defined(_WIN32)) && !defined(__CYGWIN__) && !defined(__CYGWIN32__) && !defined(__MINGW32__) && \

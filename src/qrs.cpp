@@ -1862,16 +1862,16 @@ bool qrs_coolcheck(qrsdata *q)
 {
     return
     (
-        (q->section_cool_times[q->section] <= g3_section_reqs[q->section].cool_time) &&
+        (q->section_cool_times[q->section] <= g3_section_reqs[q->section].cool_time * 60) &&
         (
             ((q->section > 1) &&
             (q->section_cool_times[q->section] + 2*60 <= q->section_cool_times[q->section-1])) !=
-            (q->section == 1)
+            (q->section == 0)
         )
     );
 }
 
 bool qrs_regretcheck(qrsdata *q)
 {
-    return (q->section_times[q->section-1] > g3_section_reqs[q->section-1].regret_time);
+    return (q->section_times[q->section-1] > g3_section_reqs[q->section-1].regret_time * 60);
 }
