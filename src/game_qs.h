@@ -119,6 +119,7 @@
 
 #define G2_DEATH_TORIKAN (3*60*60 + 25*60)
 #define G3_TERROR_TORIKAN (2*60*60 + 28*60)
+#define G3_MASTER_TORIKAN (7*60*60)
 
 #define AVG_FIRST_FIVE(T) ((T[0] + T[1] + T[2] + T[3] + T[4]) / 5)
 

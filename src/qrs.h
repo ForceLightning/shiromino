@@ -209,6 +209,13 @@ typedef struct
     int regret_time;
 } qrs_tgm3;
 
+typedef struct
+{
+    unsigned int lines;
+    float disappearing_points;
+    float invisible_points;
+} qrs_mroll;
+
 struct pracdata
 {
     int game_type;    // mirrors of values in qrsdata; these are just here so that..
@@ -347,8 +354,10 @@ typedef struct
     int section_tetrises[MAX_SECTIONS];
     unsigned long section_cool_times[MAX_SECTIONS];
     bool section_cools[MAX_SECTIONS];
+    bool section_regrets[MAX_SECTIONS];
     bool section_cool_check;
     bool section_cool_display;
+    bool early_halt_condition;
 
     // values: 1 = set to 2 next time a rotate happens.
     //           2 = lock during THIS frame ( handled by qs_process_lock() )
@@ -382,6 +391,8 @@ typedef struct
     int music;
     int cools;
     int regrets;
+    int section_skips;
+    float roll_grade;
     //int history[10];    // 0, 1, 2, 3, 4, 5 are in the past; 6 is the current piece; 7, 8, 9 are previews
 } qrsdata;
 
