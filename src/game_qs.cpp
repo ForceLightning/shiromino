@@ -575,7 +575,7 @@ static void update_music(qrsdata *q, coreState *cs)
             break;
         
         case MODE_G3_MASTER:
-            play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_terror_music));
+            play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_master_music));
             break;
 
         case MODE_G1_MASTER:
@@ -735,7 +735,7 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
     {
         q->section_times[i] = -1;
         q->section_tetrises[i] = 0;
-        q->section_cool_times[i] = -1;
+        q->section_cool_times[i] = 0;
         q->section_cools[i] = false;
         q->section_regrets[i] = false;
     }
@@ -1534,9 +1534,9 @@ int qs_game_frame(game_t *g)
 
             // TODO(G3): INTERNAL SPEED LEVEL
             case MODE_G3_MASTER:
-                while(q->speed_curve_index + q->section_skips < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level <= q->level + q->section_skips)
+                while(q->speed_curve_index < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level <= q->level + q->section_skips * 100)
                 {
-                    q->p1->speeds = &g3_master_curve[q->speed_curve_index + q->section_skips];
+                    q->p1->speeds = &g3_master_curve[q->speed_curve_index];
                     q->speed_curve_index++;
                 }
                 break;
@@ -2395,7 +2395,7 @@ int qs_process_lockflash(game_t *g)
 
                 q->level += q->lvlinc;
 
-                int pts;
+                int pts = 0;
                 float combo_mult;
                 bool gradeup = false;
 
@@ -2508,23 +2508,21 @@ int qs_process_lockflash(game_t *g)
                         break;
                     // TODO(G3): INTERNAL GRADING + SPEED
                     case MODE_G3_MASTER:
-                        if(!q->state_flags & GAMESTATE_CREDITS)
+                        if (!(q->state_flags & GAMESTATE_CREDITS))
                         {
                             pts = grade_points_table[q->internal_grade][n - 1];
                             combo_mult = g3_grade_point_combo_table[q->combo_simple - 1][n - 1];
 
                             q->grade_points += (int)ceil(pts * combo_mult) * (1 + q->level / 250);
 
-                            if(q->grade_points >= 100)
+                            if (q->grade_points >= 100)
                             {
                                 int old_grade = q->grade;
                                 q->grade_points = 0;
                                 q->internal_grade++;
                                 if(q->internal_grade > 31)
                                     q->internal_grade = 31;
-                                q->grade = (int)floor(
-                                    internal_to_displayed_grade(q->internal_grade + q->cools + q->roll_grade - q->regrets)
-                                );
+                                q->grade = (q->internal_grade + q->cools + q->roll_grade - q->regrets);
                                 if(old_grade != q->grade)
                                 {
                                     q->last_gradeup_timestamp = g->frame_counter;
@@ -2536,31 +2534,29 @@ int qs_process_lockflash(game_t *g)
                                 q->combo = 1;
                             }
                             // Score = ((Level + Lines)/4 + Soft + Sonic) x Lines x Combo + (Level_After_Clear)/2 + Speed
-                            q->score += (q->level / 4 + q->soft_drop_counter + q->sonic_drop_height) * n * q->combo + q->level / 2 + q->placement_speed;
+                            
                         }
                         else
                         {
-                            if(q->state_flags & GAMESTATE_INVISIBLE)
+                            int roll_pts = 0;
+                            if (q->state_flags & GAMESTATE_INVISIBLE)
                             {
-                                pts = g3_mroll_points[n-1].invisible_points;
+                                roll_pts = g3_mroll_points[n-1].invisible_points;
                             }
                             else if (q->state_flags & GAMESTATE_FADING)
                             {
-                                pts = g3_mroll_points[n-1].disappearing_points;
+                                roll_pts = g3_mroll_points[n-1].disappearing_points;
                             }
                             int old_grade = q->grade;
-                            q->roll_grade += pts;
-                            q->grade = (int)floor(
-                                    internal_to_displayed_grade(q->internal_grade + q->cools + q->roll_grade - q->regrets)
-                                );
+                            q->roll_grade += roll_pts;
+                            q->grade = (int)(q->internal_grade + q->cools + q->roll_grade - q->regrets);
                             if(old_grade != q->grade)
                             {
                                 q->last_gradeup_timestamp = g->frame_counter;
                                 sfx_play(&cs->assets->gradeup);
                             }
                         }
-                        
-
+                        q->score += (q->level / 4 + q->soft_drop_counter + q->sonic_drop_height) * n * q->combo + q->level / 2 + q->placement_speed;
                         break;
                 }
             }

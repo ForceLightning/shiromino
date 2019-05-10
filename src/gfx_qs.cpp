@@ -754,6 +754,7 @@ int gfx_drawqs(game_t *g)
 
         if((q->p1->state & (PSFALL | PSLOCK)) && !(q->p1->state & PSPRELOCKED))
         {
+            // TODO(G3): Do score calculation for G3 MASTER
             if(!(pd_current->flags & PDBRACKETS))
             {
                 y_bkp = q->p1->y;

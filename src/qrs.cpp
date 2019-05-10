@@ -1860,15 +1860,22 @@ switchStatement:
 
 bool qrs_coolcheck(qrsdata *q)
 {
-    return
-    (
-        (q->section_cool_times[q->section] <= g3_section_reqs[q->section].cool_time * 60) &&
-        (
-            ((q->section > 1) &&
-            (q->section_cool_times[q->section] + 2*60 <= q->section_cool_times[q->section-1])) !=
-            (q->section == 0)
-        )
-    );
+    if (q->section != 0)
+    {
+        if (q->section_cools[q->section-1])
+        {
+            return q->section_cool_times[q->section] + 2*60 <= q->section_cool_times[q->section-1] * 60;
+        }
+        else
+        {
+            return q->section_cool_times[q->section] <= g3_section_reqs[q->section].cool_time * 60;
+        }
+        
+    }
+    else
+    {
+        return q->section_cool_times[q->section] <= g3_section_reqs[q->section].cool_time * 60;
+    }
 }
 
 bool qrs_regretcheck(qrsdata *q)
