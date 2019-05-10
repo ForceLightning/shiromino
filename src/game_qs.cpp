@@ -213,7 +213,7 @@ qrs_tgm3 g3_section_reqs[10] =
     {601, 42, 50},
     {701, 38, 50},
     {801, 38, 50},
-    {901, -1, 50}
+    {901, UINT_MAX, 50}
 };
 
 qrs_mroll g3_mroll_points[5] = 
@@ -222,7 +222,7 @@ qrs_mroll g3_mroll_points[5] =
     {2, 0.08f, 0.2f},
     {3, 0.12f, 0.3f},
     {4, 0.26f, 1.0f},
-    {0xFFFFFFFF, 0.50f, 1.6f}
+    {UINT_MAX, 0.50f, 1.6f}
 };
 
 
@@ -2682,7 +2682,7 @@ int qs_process_lockflash(game_t *g)
                 q->section_times[q->section] = q->timer->time - q->cur_section_timestamp;
                 q->cur_section_timestamp = q->timer->time;
                 q->section++;
-                gfx_pushmessage(cs, "Level Up!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                // gfx_pushmessage(cs, "Level Up!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
                 // log_info("Section: %d", q->section);
                 if(q->mode_type & MODE_G3_MASTER)
                 {
