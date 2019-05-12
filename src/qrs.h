@@ -358,6 +358,7 @@ typedef struct
     bool section_cool_check;
     bool section_cool_display;
     bool early_halt_condition;
+    bool levelstop_played;
 
     // values: 1 = set to 2 next time a rotate happens.
     //           2 = lock during THIS frame ( handled by qs_process_lock() )

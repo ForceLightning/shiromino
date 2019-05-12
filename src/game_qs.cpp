@@ -863,6 +863,7 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         q->lock_protect = 1;
         q->hold_enabled = 1;
         q->early_halt_condition = false;
+        q->levelstop_played = false;
     }
 
     if(q->game_type == 0)
@@ -1495,7 +1496,8 @@ int qs_game_frame(game_t *g)
             if(q->section_cools[q->section])
             {
                 fmt->rgba = 0x00FF00FF;
-                gfx_pushmessage(cs, "COOL!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                gfx_pushmessage(cs, "COOL!", (4 * 16 + 8 + q->field_x), (16 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 120, qrs_game_is_inactive);
+                sfx_play(&cs->assets->cool);
             }
             q->section_cool_display = true;
         }
@@ -1947,7 +1949,14 @@ int qs_game_frame(game_t *g)
     }
 
     if(q->levelstop_time)
+    {
         q->levelstop_time++;
+        if(q->levelstop_played && q->mode_type & MODE_G3_MASTER)
+        {
+            sfx_play(&cs->assets->levelstop);
+            q->levelstop_played = true;
+        }
+    }
 
     if(!(q->state_flags & GAMESTATE_CREDITS))
         timeinc(q->timer);
@@ -1992,7 +2001,11 @@ static int qs_are_expired(game_t *g)
     {
         q->lvlinc = 0;
         if(q->level % 100 == 99)
+        {
+            coreState *cs = g->origin;
+            sfx_play(&cs->assets->dropfield);
             q->levelstop_time++;
+        }
     }
 
     c->lock = 0;
@@ -2425,7 +2438,7 @@ int qs_process_lockflash(game_t *g)
                         break;
 
                     case MODE_G2_DEATH:
-                        q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
+                            q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
                                     7 * q->placement_speed;
                         break;
 
@@ -2522,11 +2535,12 @@ int qs_process_lockflash(game_t *g)
                                 q->internal_grade++;
                                 if(q->internal_grade > 31)
                                     q->internal_grade = 31;
-                                q->grade = (q->internal_grade + q->cools + q->roll_grade - q->regrets);
+                                q->grade = (q->internal_grade + q->section_skips + q->roll_grade - q->regrets);
                                 if(old_grade != q->grade)
                                 {
                                     q->last_gradeup_timestamp = g->frame_counter;
                                     sfx_play(&cs->assets->gradeup);
+                                    q->levelstop_played = false;
                                 }
                             }
                             if(q->combo == 0)
@@ -2686,7 +2700,7 @@ int qs_process_lockflash(game_t *g)
                 // log_info("Section: %d", q->section);
                 if(q->mode_type & MODE_G3_MASTER)
                 {
-                    log_info("Level: %d, Section: %d: Cools: %d", q->level, q->section, q->cools);
+                    // log_info("Level: %d, Section: %d: Cools: %d", q->level, q->section, q->cools);
                     q->section_cool_check = false;
                     q->section_cool_display = false;
                 }
@@ -2915,7 +2929,8 @@ int qs_process_lockflash(game_t *g)
                                 q->mroll_unlocked = false;
                                 // TODO(G3): DISPLAY REGRET
                                 fmt->rgba = 0xFF0000FF;
-                                gfx_pushmessage(cs, "REGRET!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                                gfx_pushmessage(cs, "REGRET!", (4 * 16 + 8 + q->field_x), (16 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 120, qrs_game_is_inactive);
+                                sfx_play(&cs->assets->regret);
                             }
                             else if(q->section_cools[q->section-1])
                             {
