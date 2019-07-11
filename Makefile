@@ -19,19 +19,18 @@ ifdef MINGW
 endif
 PKG_CONFIG ?= pkg-config
 
-COMPILER_FLAGS = -Wall -Wno-comment -g `${PKG_CONFIG} --cflags sdl2` -DSQLITE_OMIT_LOAD_EXTENSION
+COMPILER_FLAGS = -Wall -Wno-comment -gdwarf-3 `${PKG_CONFIG} --cflags sdl2` -DSQLITE_OMIT_LOAD_EXTENSION
 LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lsqlite3 -lm -lpthread
 
 CFLAGS = $(COMPILER_FLAGS)
 ifeq ($(OS), Windows_NT)
-	CFLAGS += -lmingw32 -lSDL2main
-	ifdef MINGW
-		CFLAGS +=  -static-libgcc -static-libstdc++
-	endif
+	CFLAGS += -lmingw32 -lSDL2main -static-libgcc -static-libstdc++ -Wno-narrowing
+	BIN_NAME = game.exe
 else
-    UNAME_S := $(shell uname -s)
+	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S), Darwin)
 		CXX = g++-8
+		# COMPILER_FLAGS += -std=c++11 -stdlib=libc++
 	endif
 endif
 
@@ -51,8 +50,8 @@ all: dirs game
 
 game : $(OBJ)
 	$(CXX) $(OBJ) $(CFLAGS) $(LINK_FLAGS) -o $(BIN_PATH)/$(BIN_NAME)
-ifdef MINGW
-	cp /usr/i686-w64-mingw32/bin/*.dll .
+ifdef MSYS_M64
+	cp /mingw32/bin/SDL2*.dll .
 endif
 
 -include $(DEPS)

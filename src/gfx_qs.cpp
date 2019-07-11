@@ -405,6 +405,17 @@ int gfx_drawqs(game_t *g)
                     textX -= 7*16 + 8;
                     secTimeStr = strtools::format("%d", sec+1);
                     secTimeFmt.rgba = 0x8080B0FF;
+                    if(q->mode_type == MODE_G3_MASTER)
+                    {
+                        if(q->section_cools[sec])
+                        {
+                            secTimeFmt.rgba = 0x80B080FF;
+                        }
+                        else
+                        {
+                            secTimeFmt.rgba = 0x8080B0FF;
+                        }
+                    }
                     gfx_drawtext(cs, secTimeStr, textX, secY, monofont_fixedsys, &secTimeFmt);
                 }
 
@@ -743,6 +754,7 @@ int gfx_drawqs(game_t *g)
 
         if((q->p1->state & (PSFALL | PSLOCK)) && !(q->p1->state & PSPRELOCKED))
         {
+            // TODO(G3): Do score calculation for G3 MASTER
             if(!(pd_current->flags & PDBRACKETS))
             {
                 y_bkp = q->p1->y;

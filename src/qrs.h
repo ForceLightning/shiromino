@@ -142,6 +142,7 @@
 
 #define TAP_ARS 0
 #define TI_ARS 1
+#define TI_SRS 2
 
 #define BRONZE 1
 #define SILVER 2
@@ -155,6 +156,9 @@
 #define IS_QRS_PIECE(n) (n >= 0 && n < 25)
 #define GET_PIECE_FADE_COUNTER(n) ((n >> 8) & 0xffff)
 #define SET_PIECE_FADE_COUNTER(n, f) n = ((n & 0xff0000ff) | ((f & 0xffff) << 8))
+
+#define ROTATION_ARS 1
+#define ROTATION_SRS 2
 
 extern const char *qrs_piece_names[25];
 
@@ -197,6 +201,20 @@ typedef struct
     int num_olds;
     int orient;
 } qrs_player;
+
+typedef struct
+{
+    int level;
+    unsigned int cool_time;
+    int regret_time;
+} qrs_tgm3;
+
+typedef struct
+{
+    unsigned int lines;
+    float disappearing_points;
+    float invisible_points;
+} qrs_mroll;
 
 struct pracdata
 {
@@ -289,6 +307,7 @@ typedef struct
     bool using_gems;
 
     unsigned int piece_fade_rate;
+    int rot_mode;
 
 // fields which are assumed to be mutated during normal gameplay
 
@@ -333,6 +352,13 @@ typedef struct
     long cur_section_timestamp;
     int section_times[MAX_SECTIONS];
     int section_tetrises[MAX_SECTIONS];
+    unsigned long section_cool_times[MAX_SECTIONS];
+    bool section_cools[MAX_SECTIONS];
+    bool section_regrets[MAX_SECTIONS];
+    bool section_cool_check;
+    bool section_cool_display;
+    bool early_halt_condition;
+    bool levelstop_played;
 
     // values: 1 = set to 2 next time a rotate happens.
     //           2 = lock during THIS frame ( handled by qs_process_lock() )
@@ -364,6 +390,10 @@ typedef struct
 
     int speed_curve_index;
     int music;
+    int cools;
+    int regrets;
+    int section_skips;
+    float roll_grade;
     //int history[10];    // 0, 1, 2, 3, 4, 5 are in the past; 6 is the current piece; 7, 8, 9 are previews
 } qrsdata;
 
@@ -418,5 +448,9 @@ int qrs_dropfield(game_t *g);
 int qrs_spawn_garbage(game_t *g, unsigned int flags);
 
 void qrs_embiggen(piecedef *p);
+
+bool qrs_coolcheck(qrsdata *q);
+bool qrs_regretcheck(qrsdata *q);
+
 
 #endif

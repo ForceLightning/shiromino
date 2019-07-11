@@ -119,7 +119,7 @@ static qrs_timings g1_master_curve[G1_MASTER_CURVE_MAX] =
 };
 
 static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
-{
+{   // LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
     {0, 4, 30, 14, 25, 25, 40},
     {30, 6, 30, 14, 25, 25, 40},
     {35, 8, 30, 14, 25, 25, 40},
@@ -157,6 +157,75 @@ static qrs_timings g2_master_curve[G2_MASTER_CURVE_MAX] =
     {901, 5120, 17, 6, 12, 6, 6}
 };
 
+// TODO(G3 MASTER): SPEED CURVE
+qrs_timings g3_master_curve[G3_MASTER_CURVE_MAX] = 
+{   // (SPEED) LEVEL, INTERNAL GRAVITY, LOCK, DAS, ARE, LINE ARE, LINE CLEAR
+    {0, 4, 30, 14, 25, 25, 40},
+    {30, 6, 30, 14, 25, 25, 40},
+    {35, 8, 30, 14, 25, 25, 40},
+    {40, 10, 30, 14, 25, 25, 40},
+    {50, 12, 30, 14, 25, 25, 40},
+    {60, 16, 30, 14, 25, 25, 40},
+    {70, 32, 30, 14, 25, 25, 40},
+    {80, 48, 30, 14, 25, 25, 40},
+    {90, 64, 30, 14, 25, 25, 40},
+    {100, 80, 30, 14, 25, 25, 40},
+    {120, 96, 30, 14, 25, 25, 40},
+    {140, 112, 30, 14, 25, 25, 40},
+    {160, 128, 30, 14, 25, 25, 40},
+    {170, 144, 30, 14, 25, 25, 40},
+    {200, 4, 30, 14, 25, 25, 40},
+    {220, 32, 30, 14, 25, 25, 40},
+    {230, 64, 30, 14, 25, 25, 40},
+    {233, 96, 30, 14, 25, 25, 40},
+    {236, 128, 30, 14, 25, 25, 40},
+    {239, 160, 30, 14, 25, 25, 40},
+    {243, 192, 30, 14, 25, 25, 40},
+    {247, 224, 30, 14, 25, 25, 40},
+    // 251 - 500
+    {251, 256, 30, 14, 25, 25, 40},
+    {300, 512, 30, 14, 25, 25, 40},
+    {330, 768, 30, 14, 25, 25, 40},
+    {360, 1024, 30, 14, 25, 25, 40},
+    {400, 1280, 30, 14, 25, 25, 40},
+    {420, 1024, 30, 14, 25, 25, 40},
+    {450, 768, 30, 14, 25, 25, 40},
+    {500, 5120, 30, 14, 25, 25, 40},
+    // 500 - 1799
+    {500, 5120, 30, 8, 25, 25, 25},
+    {600, 5120, 30, 8, 25, 16, 16},
+    {700, 5120, 30, 8, 16, 12, 12},
+    {800, 5120, 30, 8, 12, 6, 6},
+    {900, 5120, 17, 6, 12, 6, 6},
+    {1000, 5120, 17, 6, 6, 6, 6},
+    {1100, 5120, 15, 6, 5, 5, 6},
+    {1200, 5120, 15, 6, 4, 4, 6},
+};
+
+qrs_tgm3 g3_section_reqs[10] = 
+{
+    {1, 52, 90},
+    {101, 52, 85},
+    {201, 49, 85},
+    {301, 45, 68},
+    {401, 45, 60},
+    {501, 42, 60},
+    {601, 42, 50},
+    {701, 38, 50},
+    {801, 38, 50},
+    {901, UINT_MAX, 50}
+};
+
+qrs_mroll g3_mroll_points[5] = 
+{
+    {1, 0.04f, 0.1f},
+    {2, 0.08f, 0.2f},
+    {3, 0.12f, 0.3f},
+    {4, 0.26f, 1.0f},
+    {UINT_MAX, 0.50f, 1.6f}
+};
+
+
 static qrs_timings g2_death_curve[G2_DEATH_CURVE_MAX] =
 {
     {0, 5120, 30, 10, 16, 12, 12},
@@ -182,6 +251,7 @@ static qrs_timings g3_terror_curve[G3_TERROR_CURVE_MAX] =
     {1200, 5120, 8, 4, 4, 3, 3},
     {1300, 5120, 15, 4, 4, 4, 6}
 };
+
 
 // TODO
 int g2_advance_garbage[12][24] =
@@ -283,6 +353,20 @@ float g2_grade_point_combo_table[10][4] =
     {1.5, 2.0, 2.5, 1.0},
     {1.5, 2.1, 2.6, 1.0},
     {2.0, 2.5, 3.0, 1.0}
+};
+
+float g3_grade_point_combo_table[10][4] =
+{
+    {1.0, 1.0, 1.0, 1.0},
+    {1.0, 1.2, 1.4, 1.5},
+    {1.0, 1.2, 1.5, 1.8},
+    {1.0, 1.4, 1.6, 2.0},
+    {1.0, 1.4, 1.7, 2.2},
+    {1.0, 1.4, 1.8, 2.3},
+    {1.0, 1.4, 1.9, 2.4},
+    {1.0, 1.5, 2.0, 2.5},
+    {1.0, 1.5, 2.1, 2.6},
+    {1.0, 2.0, 2.5, 3.0}
 };
 // clang-format on
 
@@ -430,6 +514,16 @@ static const struct levelmusic g3_terror_music[] = {
     { 9999, -1 }
 };
 
+static const struct levelmusic g3_master_music[] = {
+    { 0, 0 },
+    { 485, -1 },
+    { 500, 1 },
+    { 685, -1 },
+    { 700, 1 },
+    { QS_LEVEL_CREDITS, 4 },
+    { 9999, -1 }
+};
+
 static const struct levelmusic g1_music[] = {
     { 0, 0 },
     { 485, -1 },
@@ -478,6 +572,10 @@ static void update_music(qrsdata *q, coreState *cs)
 
         case MODE_G3_TERROR:
             play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_terror_music));
+            break;
+        
+        case MODE_G3_MASTER:
+            play_or_halt_music(q, cs, &cs->assets->g3_track0, find_music(q->level, g3_master_music));
             break;
 
         case MODE_G1_MASTER:
@@ -626,11 +724,20 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
 
     q->mroll_unlocked = true;
     q->cur_section_timestamp = 0;
+    q->section_cool_check = false;
+    q->section_cool_display = false;
+    q->cools = 0;
+    q->regrets = 0;
+    q->section_skips = 0;
+    q->roll_grade = 0.0f;
 
     for(int i = 0; i < MAX_SECTIONS; i++)
     {
         q->section_times[i] = -1;
         q->section_tetrises[i] = 0;
+        q->section_cool_times[i] = 0;
+        q->section_cools[i] = false;
+        q->section_regrets[i] = false;
     }
 
     if(flags & MODE_G2_DEATH)
@@ -664,6 +771,17 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         }
 
         q->credit_roll_counter = 54 * 60;
+    }
+    else if(flags & MODE_G3_MASTER)
+    {
+        q->mode_type = MODE_G3_MASTER;
+        q->grade = NO_GRADE;
+        q->lock_protect = 1;
+        flags |= SIMULATE_G3;
+        flags |= TETROMINO_ONLY;
+        flags &= ~SIMULATE_G1;
+        flags &= ~SIMULATE_G2;
+        flags &= ~PENTOMINO_ONLY;
     }
     else if(flags & MODE_G1_MASTER)
     {
@@ -744,6 +862,8 @@ game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_
         q->special_irs = 0;
         q->lock_protect = 1;
         q->hold_enabled = 1;
+        q->early_halt_condition = false;
+        q->levelstop_played = false;
     }
 
     if(q->game_type == 0)
@@ -1351,6 +1471,38 @@ int qs_game_frame(game_t *g)
         }
     }
 
+    struct text_formatting *fmt = text_fmt_create(DRAWTEXT_CENTERED, RGBA_DEFAULT, RGBA_OUTLINE_DEFAULT);
+    fmt->size_multiplier = 2.0;
+    fmt->outlined = false;
+    if(q->pracdata)
+        fmt->outlined = true;
+
+    fmt->outline_rgba = 0x00000080;
+    // TODO(G3): SECTION COOL LOGIC
+    if(q->mode_type & MODE_G3_MASTER)
+    {
+        if(((q->level - q->lvlinc) % 100) >= 70 && !q->section_cool_check)
+        {
+            q->section_cool_times[q->section] = q->timer->time - q->cur_section_timestamp;
+            if(qrs_coolcheck(q))
+            {
+                q->section_cools[q->section] = true;
+            }
+            q->section_cool_check = true;
+        }
+        if(82 <= (q->level % 100) && (q->level % 100) <= 100 && !q->section_cool_display)
+        {
+            // Display section cool
+            if(q->section_cools[q->section])
+            {
+                fmt->rgba = 0x00FF00FF;
+                gfx_pushmessage(cs, "COOL!", (4 * 16 + 8 + q->field_x), (16 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 120, qrs_game_is_inactive);
+                sfx_play(&cs->assets->cool);
+            }
+            q->section_cool_display = true;
+        }
+    }
+
     if(!q->pracdata && !(q->state_flags & GAMESTATE_FADE_TO_CREDITS))
     {
         // handle speed curve and music updates (this runs every frame)
@@ -1378,6 +1530,15 @@ int qs_game_frame(game_t *g)
                 while(q->speed_curve_index < G3_TERROR_CURVE_MAX && g3_terror_curve[q->speed_curve_index].level <= q->level)
                 {
                     q->p1->speeds = &g3_terror_curve[q->speed_curve_index];
+                    q->speed_curve_index++;
+                }
+                break;
+
+            // TODO(G3): INTERNAL SPEED LEVEL
+            case MODE_G3_MASTER:
+                while(q->speed_curve_index < G3_MASTER_CURVE_MAX && g3_master_curve[q->speed_curve_index].level <= q->level + q->section_skips * 100)
+                {
+                    q->p1->speeds = &g3_master_curve[q->speed_curve_index];
                     q->speed_curve_index++;
                 }
                 break;
@@ -1476,6 +1637,17 @@ int qs_game_frame(game_t *g)
                         q->state_flags |= GAMESTATE_FADING | GAMESTATE_CREDITS;
                     }
                 }
+                else if(q->mode_type == MODE_G3_MASTER)
+                {
+                    if(q->mroll_unlocked)
+                    {
+                        q->state_flags |= GAMESTATE_INVISIBLE | GAMESTATE_CREDITS;
+                    }
+                    else
+                    {
+                        q->state_flags |= GAMESTATE_FADING | GAMESTATE_CREDITS;
+                    }
+                }
                 else if(q->mode_type == MODE_G3_TERROR)
                 {
                     q->state_flags |= GAMESTATE_BIGMODE | GAMESTATE_CREDITS;
@@ -1536,6 +1708,29 @@ int qs_game_frame(game_t *g)
                     break;
 
                 case MODE_G2_MASTER:
+                    q->state_flags &= ~(GAMESTATE_CREDITS | GAMESTATE_FADING | GAMESTATE_INVISIBLE);
+                    if(q->p1->state != PSINACTIVE)
+                    {
+                        if(q->mroll_unlocked)
+                        {
+                            q->state_flags |= GAMESTATE_FIREWORKS_GM;
+
+                            if(q->credit_roll_lineclears >= 32)
+                                q->grade = GRADE_GM | ORANGE_LINE;
+                            else
+                                q->grade = GRADE_GM | GREEN_LINE;
+                        }
+                        else
+                        {
+                            q->state_flags |= GAMESTATE_FIREWORKS;
+                            q->grade |= ORANGE_LINE;
+                        }
+                    }
+
+                    (*s) = PSINACTIVE;
+                    break;
+                // TODO(G3): CREDIT ROLL
+                case MODE_G3_MASTER:
                     q->state_flags &= ~(GAMESTATE_CREDITS | GAMESTATE_FADING | GAMESTATE_INVISIBLE);
                     if(q->p1->state != PSINACTIVE)
                     {
@@ -1660,6 +1855,19 @@ int qs_game_frame(game_t *g)
             q->grade_decay_counter = 0;
         }
     }
+    // TODO(G3): INTERNAL GRADE DECAY LOGIC
+    if(q->mode_type == MODE_G3_MASTER)
+    {
+        int decay_rate = grade_point_decays[q->internal_grade];
+        if(((*s) & PSFALL || (*s) & PSLOCK) && q->combo_simple == 0)
+            q->grade_decay_counter++;
+
+        if(q->grade_decay_counter >= decay_rate && q->grade_points > 0)
+        {
+            q->grade_points--;
+            q->grade_decay_counter = 0;
+        }
+    }
 
     if(!q->pracdata && q->is_recovering && q->game_type == 0)
     {
@@ -1741,7 +1949,14 @@ int qs_game_frame(game_t *g)
     }
 
     if(q->levelstop_time)
+    {
         q->levelstop_time++;
+        if(q->levelstop_played && q->mode_type & MODE_G3_MASTER)
+        {
+            sfx_play(&cs->assets->levelstop);
+            q->levelstop_played = true;
+        }
+    }
 
     if(!(q->state_flags & GAMESTATE_CREDITS))
         timeinc(q->timer);
@@ -1764,6 +1979,7 @@ static int qs_are_expired(game_t *g)
             case MODE_G1_20G:
             case MODE_G1_MASTER:
             case MODE_G2_MASTER:
+            case MODE_G3_MASTER:
                 if(q->level != 998)
                 {
                     q->level++;
@@ -1774,9 +1990,7 @@ static int qs_are_expired(game_t *g)
                     q->lvlinc = 0;
                     q->levelstop_time++;
                 }
-
                 break;
-
             default:
                 q->level++;
                 q->lvlinc = 1;
@@ -1787,7 +2001,11 @@ static int qs_are_expired(game_t *g)
     {
         q->lvlinc = 0;
         if(q->level % 100 == 99)
+        {
+            coreState *cs = g->origin;
+            sfx_play(&cs->assets->dropfield);
             q->levelstop_time++;
+        }
     }
 
     c->lock = 0;
@@ -1821,6 +2039,13 @@ static int qs_are_expired(game_t *g)
             q->state_flags |= GAMESTATE_CREDITS_TOPOUT;
 
             if(q->mode_type == MODE_G2_MASTER)
+            {
+                if(q->mroll_unlocked)
+                    q->grade = GRADE_M | GREEN_LINE;
+                else
+                    q->grade |= GREEN_LINE;
+            }
+            if(q->mode_type == MODE_G3_MASTER)
             {
                 if(q->mroll_unlocked)
                     q->grade = GRADE_M | GREEN_LINE;
@@ -1945,6 +2170,15 @@ int qs_process_lineclear(game_t *g)
 
                 case MODE_G3_TERROR:
                     if(q->level == 1300 && !(q->state_flags & GAMESTATE_CREDITS))
+                    {
+                        q->state_flags |= GAMESTATE_FADE_TO_CREDITS;
+                        (*s) = PSINACTIVE;
+                    }
+
+                    break;
+                // TODO(G3): LEVEL STOP???
+                case MODE_G3_MASTER:
+                    if(q->level == 999 && !(q->state_flags & GAMESTATE_CREDITS))
                     {
                         q->state_flags |= GAMESTATE_FADE_TO_CREDITS;
                         (*s) = PSINACTIVE;
@@ -2147,14 +2381,34 @@ int qs_process_lockflash(game_t *g)
 
             if(!(q->state_flags & GAMESTATE_CREDITS) && !q->pracdata)
             {
-                if(q->game_type == SIMULATE_G3 && n > 2)
-                    q->lvlinc = 2 * n - 2;
+                if(q->game_type == SIMULATE_G3 && n > 2 && q->mode_type == MODE_G3_TERROR)
+                    q->lvlinc = 2 * n - 2;  // TODO(G3): CHECK LOGIC (n = line clear per frame)
+                else if(q->game_type == SIMULATE_G3 && n >= 3 && q->mode_type == MODE_G3_MASTER)
+                {
+                    switch(n)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                            q->lvlinc = n;
+                            break;
+                        case 3:
+                            q->lvlinc = 4;
+                            break;
+                        case 4:
+                            q->lvlinc = 6;
+                            break;
+                        default:
+                            q->lvlinc = n;
+                            break;
+                    }
+                }
                 else
                     q->lvlinc = n;
 
                 q->level += q->lvlinc;
 
-                int pts;
+                int pts = 0;
                 float combo_mult;
                 bool gradeup = false;
 
@@ -2184,7 +2438,7 @@ int qs_process_lockflash(game_t *g)
                         break;
 
                     case MODE_G2_DEATH:
-                        q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
+                            q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
                                     7 * q->placement_speed;
                         break;
 
@@ -2264,6 +2518,59 @@ int qs_process_lockflash(game_t *g)
                         q->score += (q->level / 4 + q->soft_drop_counter + 2 * q->sonic_drop_height) * n * q->combo * (bravo ? 4 : 1) + q->level / 2 +
                                     7 * q->placement_speed;
 
+                        break;
+                    // TODO(G3): INTERNAL GRADING + SPEED
+                    case MODE_G3_MASTER:
+                        if (!(q->state_flags & GAMESTATE_CREDITS))
+                        {
+                            pts = grade_points_table[q->internal_grade][n - 1];
+                            combo_mult = g3_grade_point_combo_table[q->combo_simple - 1][n - 1];
+
+                            q->grade_points += (int)ceil(pts * combo_mult) * (1 + q->level / 250);
+
+                            if (q->grade_points >= 100)
+                            {
+                                int old_grade = q->grade;
+                                q->grade_points = 0;
+                                q->internal_grade++;
+                                if(q->internal_grade > 31)
+                                    q->internal_grade = 31;
+                                q->grade = (q->internal_grade + q->section_skips + q->roll_grade - q->regrets);
+                                if(old_grade != q->grade)
+                                {
+                                    q->last_gradeup_timestamp = g->frame_counter;
+                                    sfx_play(&cs->assets->gradeup);
+                                    q->levelstop_played = false;
+                                }
+                            }
+                            if(q->combo == 0)
+                            {
+                                q->combo = 1;
+                            }
+                            // Score = ((Level + Lines)/4 + Soft + Sonic) x Lines x Combo + (Level_After_Clear)/2 + Speed
+                            
+                        }
+                        else
+                        {
+                            int roll_pts = 0;
+                            if (q->state_flags & GAMESTATE_INVISIBLE)
+                            {
+                                roll_pts = g3_mroll_points[n-1].invisible_points;
+                            }
+                            else if (q->state_flags & GAMESTATE_FADING)
+                            {
+                                roll_pts = g3_mroll_points[n-1].disappearing_points;
+                            }
+                            int old_grade = q->grade;
+                            q->roll_grade += roll_pts;
+                            q->grade = (int)(q->internal_grade + q->cools + q->roll_grade - q->regrets);
+                            if(old_grade != q->grade)
+                            {
+                                q->last_gradeup_timestamp = g->frame_counter;
+                                sfx_play(&cs->assets->gradeup);
+                            }
+                        }
+                        q->score += (q->level / 4 + q->soft_drop_counter + q->sonic_drop_height) * n * q->combo + q->level / 2 + q->placement_speed;
                         break;
                 }
             }
@@ -2378,12 +2685,25 @@ int qs_process_lockflash(game_t *g)
             }
 
             sfx_play(&cs->assets->lineclear);
+            struct text_formatting *fmt = text_fmt_create(DRAWTEXT_CENTERED, RGBA_DEFAULT, RGBA_OUTLINE_DEFAULT);
+            fmt->size_multiplier = 2.0;
+            fmt->outlined = false;
+            if(q->pracdata)
+                fmt->outlined = true;
 
             if(((q->level - q->lvlinc) % 100) > 90 && (q->level % 100) < 10)
             {
                 q->section_times[q->section] = q->timer->time - q->cur_section_timestamp;
                 q->cur_section_timestamp = q->timer->time;
                 q->section++;
+                // gfx_pushmessage(cs, "Level Up!", (4 * 16 + 8 + q->field_x), (11 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+                // log_info("Section: %d", q->section);
+                if(q->mode_type & MODE_G3_MASTER)
+                {
+                    // log_info("Level: %d, Section: %d: Cools: %d", q->level, q->section, q->cools);
+                    q->section_cool_check = false;
+                    q->section_cool_display = false;
+                }
 
                 q->levelstop_time = 0;
 
@@ -2401,6 +2721,7 @@ int qs_process_lockflash(game_t *g)
 
                                 histrand_set_difficulty(q->randomizer, 10.0);
                             }
+                            // TODO(G3): MROLL CONDITIONS
                             else if(q->section == 10)
                             {
                                 if(q->timer->time > 11 * 60 * 60)
@@ -2581,6 +2902,41 @@ int qs_process_lockflash(game_t *g)
                             }
 
                             break;
+                        case MODE_G3_MASTER:
+                            // TODO(G3): SECTION REGRET LOGIC
+                            if(q->section == 7)
+                            {
+                                if(q->timer->time > G3_MASTER_TORIKAN)
+                                {
+                                    q->section--;
+                                    if(q->playback)
+                                        qrs_end_playback(g);
+                                    else if(q->recording)
+                                        qrs_end_record(g);
+                                    q->p1->state = PSINACTIVE;
+                                }
+                            }
+                            if(q->level >= 999)
+                            {
+                                q->level = 999;
+                                if(q->regrets > 1 || q->internal_grade < INTERNAL_GRADE_S7 || q->cools < 9)
+                                    q->mroll_unlocked = false;
+                            }
+                            if(qrs_regretcheck(q))
+                            {
+                                q->regrets++;
+                                q->section_regrets[q->section-1] = true;
+                                q->mroll_unlocked = false;
+                                // TODO(G3): DISPLAY REGRET
+                                fmt->rgba = 0xFF0000FF;
+                                gfx_pushmessage(cs, "REGRET!", (4 * 16 + 8 + q->field_x), (16 * 16 + q->field_y), 0, monofont_fixedsys, fmt, 120, qrs_game_is_inactive);
+                                sfx_play(&cs->assets->regret);
+                            }
+                            else if(q->section_cools[q->section-1])
+                            {
+                                q->section_skips++;
+                            }
+                            break;
 
                         case MODE_G1_20G:
                         case MODE_G1_MASTER:
@@ -2652,6 +3008,14 @@ int qs_process_lockflash(game_t *g)
                     case MODE_G3_TERROR:
                         break;
 
+                    // TODO(G3): MROLL CONDITIONS
+                    case MODE_G3_MASTER:
+                        if(q->timer->time > 525 * 60 || q->grade < GRADE_S9)
+                            q->mroll_unlocked = false;
+
+                        if(q->section_times[9] > (q->section_times[8]) + 2 * 60)
+                            q->mroll_unlocked = false;
+                        break;
                     case MODE_G1_20G:
                     case MODE_G1_MASTER:
                         if(q->timer->time >= (13 * 60 * 60 + 30 * 60) || q->score < 126000)
@@ -3220,7 +3584,7 @@ int qs_update_pracdata(coreState *cs)
         piece_seq[num - 1] = 1;
     }
 
-end_sequence_proc:
+    end_sequence_proc:
     for(i = 0; i < num; i++)
         d->usr_sequence[i] = piece_seq[i];
 

@@ -7,6 +7,7 @@
 #define QS_CURVE_MAX 19
 #define G1_MASTER_CURVE_MAX 30
 #define G2_MASTER_CURVE_MAX 35
+#define G3_MASTER_CURVE_MAX 38
 #define G2_DEATH_CURVE_MAX 9
 #define G3_TERROR_CURVE_MAX 9
 
@@ -31,6 +32,7 @@
 #define MODE_G1_MASTER 0x0400
 #define MODE_G1_20G    0x0800
 #define MODE_G2_MASTER 0x1000
+#define MODE_G3_MASTER 0x2000
 // should add "variation" codes that change mode behavior (unique code interpretations for each mode maybe)
 
 #define RANDOMIZER_NORMAL 0
@@ -117,6 +119,7 @@
 
 #define G2_DEATH_TORIKAN (3*60*60 + 25*60)
 #define G3_TERROR_TORIKAN (2*60*60 + 28*60)
+#define G3_MASTER_TORIKAN (7*60*60)
 
 #define AVG_FIRST_FIVE(T) ((T[0] + T[1] + T[2] + T[3] + T[4]) / 5)
 
@@ -130,6 +133,7 @@
 const char *get_grade_name(int grade);
 const char *get_internal_grade_name(int index);
 int internal_to_displayed_grade(int internal_grade);
+extern qrs_tgm3 g3_section_reqs[10];
 
 game_t *qs_game_create(coreState *cs, int level, unsigned int flags, int replay_id);
 int qs_game_init(game_t *g);
